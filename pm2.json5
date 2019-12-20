@@ -1,0 +1,13 @@
+{
+  apps: [{
+    name: 'oidc-provider',
+    script: 'server.js',
+    exec_mode: 'fork',
+    instances: 1,
+    env: {
+      NODE_ENV: 'production',
+      NODE_PORT : 7000
+    },
+    'max-memory-restart': '300M'
+  }]
+}
