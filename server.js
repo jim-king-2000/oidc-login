@@ -33,20 +33,20 @@ if (process.env.NODE_ENV === 'production') {
   set(configuration, 'cookies.short.secure', true);
   set(configuration, 'cookies.long.secure', true);
 
-//   app.use(async (ctx, next) => {
-//     if (ctx.secure) {
-//       await next();
-//     } else if (ctx.method === 'GET' || ctx.method === 'HEAD') {
-//       ctx.redirect(ctx.href.replace(/^http:\/\//i, 'https://'));
-//     } else {
-//       ctx.body = {
-//         error: 'invalid_request',
-//         error_description: 'do yourself a favor and only use https',
-//       };
-//       ctx.status = 400;
-//     }
-//   });
-// }
+  // app.use(async (ctx, next) => {
+  //   if (ctx.secure) {
+  //     await next();
+  //   } else if (ctx.method === 'GET' || ctx.method === 'HEAD') {
+  //     ctx.redirect(ctx.href.replace(/^http:\/\//i, 'https://'));
+  //   } else {
+  //     ctx.body = {
+  //       error: 'invalid_request',
+  //       error_description: 'do yourself a favor and only use https',
+  //     };
+  //     ctx.status = 400;
+  //   }
+  // });
+}
 
 let server;
 (async () => {
