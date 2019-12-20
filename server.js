@@ -7,6 +7,7 @@ const Koa = require('koa');
 const render = require('koa-ejs');
 const helmet = require('koa-helmet');
 const mount = require('koa-mount');
+const cors = require('@koa/cors');
 
 const { Provider } = require('oidc-provider');
 
@@ -18,6 +19,7 @@ const { PORT = 7000, ISSUER = `http://localhost:${PORT}` } = process.env;
 configuration.findAccount = Account.findAccount;
 
 const app = new Koa();
+app.use(cors());
 app.use(helmet());
 render(app, {
   cache: false,
