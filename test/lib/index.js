@@ -2,6 +2,7 @@
 export function getClientSettings() {
   return {
     authority: 'http://47.96.126.79:7000/',
+    // authority: 'http://localhost:7000/',
     client_id: 'oidcCLIENT',
     // client_secret: '...',
     redirect_uri: 'http://localhost:3000/cb',
