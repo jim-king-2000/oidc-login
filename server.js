@@ -14,7 +14,7 @@ const Account = require('./support/account');
 const configuration = require('./support/configuration');
 const routes = require('./routes/koa');
 
-const { PORT = 2000, ISSUER = `http://localhost:${PORT}` } = process.env;
+const { PORT = 7000, ISSUER = `http://localhost:${PORT}` } = process.env;
 configuration.findAccount = Account.findAccount;
 
 const app = new Koa();
