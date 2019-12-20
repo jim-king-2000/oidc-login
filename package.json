@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "pm2 start pm2.json5",
+    "stop": "pm2 delete pm2.json5",
     "dev": "node server.js"
   },
   "keywords": [],
