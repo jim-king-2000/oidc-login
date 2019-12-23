@@ -18,7 +18,7 @@ module.exports = {
       client_id: 'oidcCLIENT',
       client_secret: '...',
       grant_types: ['authorization_code', 'implicit', 'refresh_token'],
-      application_type: 'native',
+      application_type: 'web',
       token_endpoint_auth_method: 'none',
       response_types: ['code', 'id_token', 'code id_token', 'id_token token'],
       redirect_uris: [
