@@ -21,7 +21,10 @@ module.exports = {
       application_type: 'native',
       token_endpoint_auth_method: 'none',
       response_types: ['code', 'id_token', 'code id_token', 'id_token token'],
-      redirect_uris: ['http://localhost:3000/cb'],
+      redirect_uris: [
+        'http://localhost:3000/cb',
+        'http://localhost:8092/callback',
+      ],
       post_logout_redirect_uris: ['http://localhost:3000/logoutcb'],
     }
   ],
