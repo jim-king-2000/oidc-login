@@ -24,7 +24,7 @@ module.exports = {
       redirect_uris: [
         'http://localhost:3000/cb',
         'http://localhost:8092/callback',
-        'http://locationbackbone.top:10000/',
+        'http://locationbackbone.top:10000/callback',
       ],
       post_logout_redirect_uris: ['http://localhost:3000/logoutcb'],
     }
