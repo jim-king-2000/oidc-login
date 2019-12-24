@@ -26,7 +26,11 @@ module.exports = {
         'http://localhost:8092/callback',
         'http://locationbackbone.top:10000/callback',
       ],
-      post_logout_redirect_uris: ['http://localhost:3000/logoutcb'],
+      post_logout_redirect_uris: [
+        'http://localhost:3000/logoutcb',
+        'http://localhost:8092/logoutCallback',
+        'http://locationbackbone.top:10000/logoutCallback',
+      ],
     }
   ],
   pkceMethods: [ 'plain', 'S256' ],
