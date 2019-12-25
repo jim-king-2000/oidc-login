@@ -46,6 +46,7 @@ module.exports = (provider) => {
       uid, prompt, params, session,
     } = await provider.interactionDetails(ctx.req, ctx.res);
     const client = await provider.Client.find(params.client_id);
+    console.log('/interaction/:uid', params.name);
 
     switch (prompt.name) {
       case 'select_account': {
@@ -205,7 +206,7 @@ module.exports = (provider) => {
   router.post('/interaction/:uid/confirm', body, async (ctx) => {
     const { prompt: { name, details } } = await provider.interactionDetails(ctx.req, ctx.res);
     assert.equal(name, 'consent');
-    console.log('/interaction/:uid/confirm')
+    console.log('/interaction/:uid/confirm', ctx.request.body)
 
     const consent = {};
 
