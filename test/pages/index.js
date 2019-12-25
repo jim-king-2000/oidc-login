@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { UserManager } from 'oidc-client';
+import { UserManager } from 'oidc-client/lib/oidc-client';
 import { getClientSettings } from '../lib';
 
 export default class extends Component {
