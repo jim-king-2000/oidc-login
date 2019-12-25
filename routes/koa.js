@@ -46,7 +46,6 @@ module.exports = (provider) => {
       uid, prompt, params, session,
     } = await provider.interactionDetails(ctx.req, ctx.res);
     const client = await provider.Client.find(params.client_id);
-    console.log('/interaction/:uid', prompt.name)
 
     switch (prompt.name) {
       case 'select_account': {
