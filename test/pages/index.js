@@ -20,8 +20,7 @@ export default class extends Component {
     this.setState({ isLogged: !!(user && !user.expired) });
     if (!user) return;
 
-    let timeout = user.expires_at * 1000 - Date.now();
-    timeout = timeout > 0 ? timeout: 0;
+    const timeout = Math.max(0, user.expires_at * 1000 - Date.now());
 
     setTimeout(async () => {
       try {
