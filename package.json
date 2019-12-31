@@ -6,7 +6,8 @@
   "scripts": {
     "start": "pm2 start pm2.json5",
     "stop": "pm2 delete pm2.json5",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "cd test&&npm run dev"
   },
   "keywords": [],
   "author": "",

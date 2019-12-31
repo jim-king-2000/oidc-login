@@ -6,20 +6,38 @@ export default class extends Component {
 
   state = { isLogged: false }
 
-  login = async () => {
-    const manager = new UserManager(getClientSettings());
-    manager.signinRedirect();
+  login = () => {
+    this.manager.signinRedirect();
   }
 
-  logout = async () => {
-    const manager = new UserManager(getClientSettings());
-    manager.signoutRedirect();
+  logout = () => {
+    this.manager.signoutRedirect();
+  }
+
+  scheduleRenew = async (manager) => {
+    const user = await manager.getUser();
+    console.log("line 19", user && user.expired);
+    this.setState({ isLogged: !!(user && !user.expired) });
+    if (!user) return;
+
+    let timeout = user.expires_at * 1000 - Date.now();
+    timeout = timeout > 0 ? timeout: 0;
+
+    setTimeout(async () => {
+      try {
+        await manager.signinSilent();
+        this.scheduleRenew(manager);
+      } catch (e) {
+        console.error(e);
+        manager.signoutRedirect();
+      }
+    }, timeout);
   }
 
   async componentDidMount() {
     const manager = new UserManager(getClientSettings());
-    const user = await manager.getUser();
-    this.setState({ isLogged: !!(user && !user.expired) });
+    this.manager = manager;
+    this.scheduleRenew(manager);
   }
 
   render() {

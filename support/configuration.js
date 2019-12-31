@@ -22,14 +22,17 @@ module.exports = {
       token_endpoint_auth_method: 'none',
       response_types: ['code', 'id_token', 'code id_token', 'id_token token'],
       redirect_uris: [
-        'http://localhost:3000/cb',
-        'http://localhost:8092/callback',
-        'http://locationbackbone.top:10000/callback',
+        'http://localhost:3000/signinRedirectCallback',
+        'http://localhost:3000/signinSilentCallback',
+        'http://localhost:8092/signinRedirectCallback',
+        'http://localhost:8092/signinSilentCallback',
+        'http://locationbackbone.top:10000/signinRedirectCallback',
+        'http://locationbackbone.top:10000/signinSilentCallback',
       ],
       post_logout_redirect_uris: [
-        'http://localhost:3000/logoutcb',
-        'http://localhost:8092/logoutCallback',
-        'http://locationbackbone.top:10000/logoutCallback',
+        'http://localhost:3000/signoutRedirectCallback',
+        'http://localhost:8092/signoutRedirectCallback',
+        'http://locationbackbone.top:10000/signoutRedirectCallback',
       ],
     }
   ],
