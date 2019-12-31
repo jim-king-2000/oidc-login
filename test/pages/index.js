@@ -24,11 +24,12 @@ export default class extends Component {
 
     setTimeout(async () => {
       try {
-        await manager.signinSilent();
+        const user = await manager.signinSilent();
+        console.log(user);
         this.scheduleRenew(manager);
       } catch (e) {
         console.error(e);
-        manager.signoutRedirect();
+        manager.removeUser();
       }
     }, timeout);
   }
