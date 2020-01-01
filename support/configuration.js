@@ -86,10 +86,10 @@ module.exports = {
     ],
   },
   ttl: {
-    AccessToken: 1 * 60 * 60,
+    AccessToken: 15 * 60,
     // AccessToken: 5,
     AuthorizationCode: 10 * 60, // 10 minutes in seconds
-    IdToken: 1 * 60 * 60,
+    IdToken: 15 * 60,
     // IdToken: 5,
     DeviceCode: 10 * 60, // 10 minutes in seconds
     RefreshToken: 1 * 24 * 60 * 60, // 1 day in seconds
