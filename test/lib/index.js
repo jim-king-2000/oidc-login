@@ -13,5 +13,6 @@ export function getClientSettings() {
     filterProtocolClaims: true,
     loadUserInfo: true,
     silentRequestTimeout: 100000,
+    includeIdTokenInSilentRenew: false,
   };
 }
