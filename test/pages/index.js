@@ -16,7 +16,7 @@ export default class extends Component {
 
   scheduleRenew = async (manager) => {
     const user = await manager.getUser();
-    console.log("line 19", user && user.expired);
+    console.log(user);
     this.setState({ isLogged: !!(user && !user.expired) });
     if (!user) return;
 

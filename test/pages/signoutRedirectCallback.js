@@ -5,9 +5,12 @@ import { getClientSettings } from '../lib';
 
 export default class extends Component {
   async componentDidMount() {
-    const manager = new UserManager(getClientSettings());
-    await manager.signoutRedirectCallback();
-    Router.replace('/');
+    try {
+      const manager = new UserManager(getClientSettings());
+      await manager.signoutRedirectCallback();
+    } finally {
+      Router.replace('/');
+    }
   }
 
   render() {

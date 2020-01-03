@@ -43,10 +43,11 @@ module.exports = (provider) => {
 
   router.get('/interaction/:uid', async (ctx, next) => {
     const {
-      uid, prompt, params, session,
+      uid, prompt, params, session, ...other
     } = await provider.interactionDetails(ctx.req, ctx.res);
     const client = await provider.Client.find(params.client_id);
-    console.log('/interaction/:uid', params.name);
+    console.log('/interaction/:uid', prompt.name);
+    console.log(session)
 
     switch (prompt.name) {
       case 'select_account': {
@@ -114,11 +115,19 @@ module.exports = (provider) => {
   router.get('/interaction/callback/google', (ctx) => ctx.render('repost', { provider: 'google', layout: false }));
 
   router.post('/interaction/:uid/login', body, async (ctx) => {
-    const { prompt: { name } } = await provider.interactionDetails(ctx.req, ctx.res);
+    const { uid, prompt: { name } } = await provider.interactionDetails(ctx.req, ctx.res);
     assert.equal(name, 'login');
     console.log('/interaction/:uid/login', ctx.request.body)
 
     const account = await Account.findByLogin(ctx.request.body.login);
+    if (!account || ctx.request.body.password !== account.password) {
+      ctx.redirect(`/interaction/${uid}`);
+      return provider.setProviderSession(ctx.req, ctx.res, {
+        account: ctx.request.body.login,
+        clients: ['oidcCLIENT'],
+        meta: { oidcCLIENT: { error: '用户名密码错误' } },
+      });
+    }
 
     const result = {
       select_account: {}, // make sure its skipped by the interaction policy since we just logged in

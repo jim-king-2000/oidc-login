@@ -1,23 +1,30 @@
-const store = new Map();
-const logins = new Map();
 const nanoid = require('nanoid');
 
+const store = new Map();
+
 const ValidClaims = [{
-  sub: "auth0|5bfbc35e81125149615b3549",
-  nickname: "testbus",
-  name: "testbus@bytebilling.com",
-  email: "testbus@bytebilling.com",
+  sub: 'auth0|5bfbc35e81125149615b3549',
+  nickname: 'testbus',
+  name: 'testbus@bytebilling.com',
+  email: 'testbus@bytebilling.com',
+  email_verified: false,
+}, {
+  sub: 'test@bytebilling.com',
+  nickname: 'test',
+  name: 'test@bytebilling.com',
+  email: 'test@bytebilling.com',
   email_verified: false,
 }];
 
 class Account {
-  constructor(id) {
+  constructor(id, password) {
     this.accountId = id || nanoid();
+    this.password = password;
     store.set(this.accountId, this);
   }
 
   /**
-   * @param use - can either be "id_token" or "userinfo", depending on
+   * @param use - can either be 'id_token' or 'userinfo', depending on
    *   where the specific claims are intended to be put in.
    * @param scope - the intended scope, while oidc-provider will mask
    *   claims depending on the scope automatically you might want to skip
@@ -48,9 +55,9 @@ class Account {
   }
 
   static async findByLogin(login) {
-    if (!logins.get(login)) {
-      logins.set(login, new Account(login));
-    }
+    // if (!logins.get(login)) {
+    //   logins.set(login, new Account(login));
+    // }
 
     return logins.get(login);
   }
@@ -63,5 +70,12 @@ class Account {
     return store.get(id);
   }
 }
+
+const logins = new Map(
+  [
+    ['testbus@bytebilling.com', new Account('testbus@bytebilling.com', 'qwe!@#123')],
+    ['test@bytebilling.com', new Account('test@bytebilling.com', 'test')],
+  ]
+);
 
 module.exports = Account;
