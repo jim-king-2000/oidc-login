@@ -8,14 +8,12 @@ import Router from 'koa-router';
 import lodash from 'lodash';
 import Account from '../support/account.mjs';
 
-const isEmpty = lodash.isEmpty;
-
 // const { renderError } = require('../../lib/helpers/defaults');
 
 const keys = new Set();
 const debug = (obj) => querystring.stringify(Object.entries(obj).reduce((acc, [key, value]) => {
   keys.add(key);
-  if (isEmpty(value)) return acc;
+  if (lodash.isEmpty(value)) return acc;
   acc[key] = inspect(value, { depth: null });
   return acc;
 }, {}), '<br/>', ': ', {
