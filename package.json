@@ -22,7 +22,7 @@
     "koa-router": "^7.4.0",
     "lodash": "^4.17.15",
     "mongodb": "^3.4.1",
-    "oidc-provider": "^6.18.0",
+    "oidc-provider": "^6.18.1",
     "pm2": "^4.2.1"
   },
   "devDependencies": {
