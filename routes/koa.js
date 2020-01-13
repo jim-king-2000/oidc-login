@@ -43,11 +43,10 @@ module.exports = (provider) => {
 
   router.get('/interaction/:uid', async (ctx, next) => {
     const {
-      uid, prompt, params, session, ...other
+      uid, prompt, params, session
     } = await provider.interactionDetails(ctx.req, ctx.res);
     const client = await provider.Client.find(params.client_id);
     console.log('/interaction/:uid', prompt.name);
-    console.log(session)
 
     switch (prompt.name) {
       case 'select_account': {
@@ -121,12 +120,13 @@ module.exports = (provider) => {
 
     const account = await Account.findByLogin(ctx.request.body.login);
     if (!account || ctx.request.body.password !== account.password) {
-      ctx.redirect(`/interaction/${uid}`);
-      return provider.setProviderSession(ctx.req, ctx.res, {
+      await provider.setProviderSession(ctx.req, ctx.res, {
         account: ctx.request.body.login,
         clients: ['oidcCLIENT'],
-        meta: { oidcCLIENT: { error: '用户名密码错误' } },
+        meta: { oidcCLIENT: { error: 'Invalid username or password!' } },
       });
+      ctx.redirect(`/interaction/${uid}`);
+      return;
     }
 
     const result = {
