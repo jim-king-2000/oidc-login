@@ -1,4 +1,4 @@
-const nanoid = require('nanoid');
+import nanoid from 'nanoid';
 
 const store = new Map();
 
@@ -78,4 +78,4 @@ const logins = new Map(
   ]
 );
 
-module.exports = Account;
+export default Account;

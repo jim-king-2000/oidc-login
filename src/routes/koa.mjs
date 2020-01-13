@@ -1,15 +1,16 @@
 /* eslint-disable no-console, max-len, camelcase, no-unused-vars */
-const { strict: assert } = require('assert');
-const querystring = require('querystring');
-const crypto = require('crypto');
-const { inspect } = require('util');
+import assert from 'assert';
+import querystring from 'querystring';
+import crypto from 'crypto';
+import { inspect } from 'util';
+import bodyParser from 'koa-body';
+import Router from 'koa-router';
+import lodash from 'lodash';
+import Account from '../support/account.mjs';
 
-const isEmpty = require('lodash/isEmpty');
-const bodyParser = require('koa-body');
-const Router = require('koa-router');
+const isEmpty = lodash.isEmpty;
 
 // const { renderError } = require('../../lib/helpers/defaults');
-const Account = require('../support/account');
 
 const keys = new Set();
 const debug = (obj) => querystring.stringify(Object.entries(obj).reduce((acc, [key, value]) => {
@@ -21,7 +22,7 @@ const debug = (obj) => querystring.stringify(Object.entries(obj).reduce((acc, [k
   encodeURIComponent(value) { return keys.has(value) ? `<strong>${value}</strong>` : value; },
 });
 
-module.exports = (provider) => {
+export default (provider) => {
   const router = new Router();
   const { constructor: { errors: { SessionNotFound } } } = provider;
 

@@ -1,4 +1,6 @@
-const { interactionPolicy: { Prompt, base: policy } } = require('oidc-provider');
+import oidcProvider from 'oidc-provider';
+
+const { Prompt, base: policy } = oidcProvider.interactionPolicy;
 
 // copies the default policy, already has login and consent prompt policies
 const interactions = policy();
@@ -12,7 +14,7 @@ const selectAccount = new Prompt({
 // add to index 0, order goes select_account > login > consent
 interactions.add(selectAccount, 0);
 
-module.exports = {
+export default {
   clients: [
     {
       client_id: 'oidcCLIENT',

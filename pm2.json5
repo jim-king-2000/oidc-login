@@ -1,7 +1,7 @@
 {
   apps: [{
     name: 'oidc-provider',
-    script: 'src/server.js',
+    script: 'node --harmony-top-level-await src/server.mjs',
     exec_mode: 'fork',
     instances: 1,
     env: {
