@@ -41,7 +41,6 @@ export default {
   formats: {
     AccessToken: 'jwt',
   },
-  pkceMethods: [ 'plain', 'S256' ],
   responseTypes: ['code id_token token', 'code id_token', 'code token', 'code', 'id_token token', 'id_token', 'none'],
   interactions: {
     policy: interactions,
