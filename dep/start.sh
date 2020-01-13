@@ -1,3 +1,3 @@
-git pull&&npm i
 npm stop
+git pull&&npm i
 npm start
