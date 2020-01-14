@@ -14,7 +14,7 @@ import Account from './support/account.mjs';
 import configuration from './support/configuration.mjs';
 import routes from './routes/koa.mjs';
 
-const { GOOGLE_CLIENT_ID, PORT = 7000, ISSUER = `http://localhost:${PORT}` } = process.env;
+const { MICROSOFT_CLIENT_ID, PORT = 7000, ISSUER = `http://localhost:${PORT}` } = process.env;
 configuration.findAccount = Account.findAccount;
 
 const app = new Koa();
@@ -56,10 +56,10 @@ if (process.env.MONGODB_URI) {
 
 const provider = new oidcProvider.Provider(ISSUER, { adapter, ...configuration });
 
-if (GOOGLE_CLIENT_ID) {
+if (MICROSOFT_CLIENT_ID) {
   const google = await openid.Issuer.discover('https://login.microsoftonline.com/bf7ed45e-700d-49f5-b7ed-0d588d4992f7/v2.0/.well-known/openid-configuration');
   const googleClient = new google.Client({
-    client_id: GOOGLE_CLIENT_ID,
+    client_id: MICROSOFT_CLIENT_ID,
     response_types: ['id_token'],
     redirect_uris: [`${ISSUER}/interaction/callback/google`],
     grant_types: ['implicit'],

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "pm2 start pm2.json5",
     "stop": "pm2 delete pm2.json5",
-    "dev": "cross-env GOOGLE_CLIENT_ID=81c51d3f-758e-4355-91fd-9781ae76193c nodemon --harmony-top-level-await src/server.mjs --inspect src",
+    "dev": "cross-env MICROSOFT_CLIENT_ID=81c51d3f-758e-4355-91fd-9781ae76193c nodemon --harmony-top-level-await src/server.mjs --inspect src",
     "test": "cd test&&npm run dev"
   },
   "keywords": [],
