@@ -6,7 +6,8 @@
     instances: 1,
     env: {
       // NODE_ENV: 'production',
-      NODE_PORT : 7000
+      NODE_PORT : 7000,
+      GOOGLE_CLIENT_ID: '81c51d3f-758e-4355-91fd-9781ae76193c'
     },
     'max-memory-restart': '300M'
   }]
