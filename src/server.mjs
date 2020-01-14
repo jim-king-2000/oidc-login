@@ -9,11 +9,12 @@ import helmet from 'koa-helmet';
 import mount from 'koa-mount';
 import cors from '@koa/cors';
 import oidcProvider from 'oidc-provider';
+import openid from 'openid-client';
 import Account from './support/account.mjs';
 import configuration from './support/configuration.mjs';
 import routes from './routes/koa.mjs';
 
-const { PORT = 7000, ISSUER = `http://localhost:${PORT}` } = process.env;
+const { GOOGLE_CLIENT_ID, PORT = 7000, ISSUER = `http://localhost:${PORT}` } = process.env;
 configuration.findAccount = Account.findAccount;
 
 const app = new Koa();
@@ -55,6 +56,30 @@ if (process.env.MONGODB_URI) {
 
 const provider = new oidcProvider.Provider(ISSUER, { adapter, ...configuration });
 
+if (GOOGLE_CLIENT_ID) {
+  const google = await openid.Issuer.discover('https://login.microsoftonline.com/bf7ed45e-700d-49f5-b7ed-0d588d4992f7/v2.0/.well-known/openid-configuration');
+  const googleClient = new google.Client({
+    client_id: GOOGLE_CLIENT_ID,
+    response_types: ['id_token'],
+    redirect_uris: [`${ISSUER}/interaction/callback/google`],
+    grant_types: ['implicit'],
+  });
+  provider.app.context.google = googleClient;
+}
+
+const { interactionFinished } = provider;
+provider.interactionFinished = (...args) => {
+  const { login } = args[2];
+  if (login) {
+    Object.assign(args[2].login, {
+      acr: 'urn:mace:incommon:iap:bronze',
+      amr: login.account.startsWith('google.') ? ['google'] : ['pwd'],
+    });
+  }
+
+  return interactionFinished.call(provider, ...args);
+};
+
 const { invalidate: orig } = provider.Client.Schema.prototype;
 
 provider.Client.Schema.prototype.invalidate = function invalidate(message, code) {
@@ -66,6 +91,17 @@ provider.Client.Schema.prototype.invalidate = function invalidate(message, code)
 };
 
 provider.use(helmet());
+
+provider.use((ctx, next) => {
+  if (ctx.path !== '/.well-known/oauth-authorization-server') {
+    return next();
+  }
+
+  ctx.path = '/.well-known/openid-configuration';
+  return next().then(() => {
+    ctx.path = '/.well-known/oauth-authorization-server';
+  });
+});
 
 app.use(routes(provider).routes());
 app.use(mount(provider.app));

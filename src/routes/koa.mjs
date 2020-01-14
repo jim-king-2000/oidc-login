@@ -46,6 +46,7 @@ export default (provider) => {
     } = await provider.interactionDetails(ctx.req, ctx.res);
     const client = await provider.Client.find(params.client_id);
     console.log('/interaction/:uid', prompt.name);
+    ctx.google = provider.app.context.google;
 
     switch (prompt.name) {
       case 'select_account': {
@@ -143,8 +144,10 @@ export default (provider) => {
   router.post('/interaction/:uid/federated', body, async (ctx) => {
     const { prompt: { name } } = await provider.interactionDetails(ctx.req, ctx.res);
     assert.equal(name, 'login');
-    console.log('/interaction/:uid/federated')
-
+    console.log('/interaction/:uid/federated');
+    ctx.google = provider.app.context.google;
+    console.log(ctx.request.body.provider);
+    
     const path = `/interaction/${ctx.params.uid}/federated`;
 
     switch (ctx.request.body.provider) {
