@@ -47,7 +47,6 @@ if (process.env.NODE_ENV === 'production') {
   // });
 }
 
-let server;
 let adapter;
 if (process.env.MONGODB_URI) {
   adapter = require('./adapters/mongodb'); // eslint-disable-line global-require
@@ -64,7 +63,7 @@ if (MICROSOFT_CLIENT_ID) {
     redirect_uris: [`${ISSUER}/interaction/callback/google`],
     grant_types: ['implicit'],
   });
-  provider.app.context.google = googleClient;
+  app.context.google = googleClient;
 }
 
 const { interactionFinished } = provider;
@@ -92,19 +91,19 @@ provider.Client.Schema.prototype.invalidate = function invalidate(message, code)
 
 provider.use(helmet());
 
-provider.use((ctx, next) => {
-  if (ctx.path !== '/.well-known/oauth-authorization-server') {
-    return next();
-  }
+// provider.use((ctx, next) => {
+//   if (ctx.path !== '/.well-known/oauth-authorization-server') {
+//     return next();
+//   }
 
-  ctx.path = '/.well-known/openid-configuration';
-  return next().then(() => {
-    ctx.path = '/.well-known/oauth-authorization-server';
-  });
-});
+//   ctx.path = '/.well-known/openid-configuration';
+//   return next().then(() => {
+//     ctx.path = '/.well-known/oauth-authorization-server';
+//   });
+// });
 
 app.use(routes(provider).routes());
 app.use(mount(provider.app));
-server = app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`application is listening on port ${PORT}, check its /.well-known/openid-configuration`);
 });
