@@ -32,19 +32,19 @@ if (process.env.NODE_ENV === 'production') {
   lodash.set(configuration, 'cookies.short.secure', true);
   lodash.set(configuration, 'cookies.long.secure', true);
 
-  // app.use(async (ctx, next) => {
-  //   if (ctx.secure) {
-  //     await next();
-  //   } else if (ctx.method === 'GET' || ctx.method === 'HEAD') {
-  //     ctx.redirect(ctx.href.replace(/^http:\/\//i, 'https://'));
-  //   } else {
-  //     ctx.body = {
-  //       error: 'invalid_request',
-  //       error_description: 'do yourself a favor and only use https',
-  //     };
-  //     ctx.status = 400;
-  //   }
-  // });
+  app.use(async (ctx, next) => {
+    if (ctx.secure) {
+      await next();
+    } else if (ctx.method === 'GET' || ctx.method === 'HEAD') {
+      ctx.redirect(ctx.href.replace(/^http:\/\//i, 'https://'));
+    } else {
+      ctx.body = {
+        error: 'invalid_request',
+        error_description: 'do yourself a favor and only use https',
+      };
+      ctx.status = 400;
+    }
+  });
 }
 
 let adapter;
@@ -90,17 +90,6 @@ provider.Client.Schema.prototype.invalidate = function invalidate(message, code)
 };
 
 provider.use(helmet());
-
-// provider.use((ctx, next) => {
-//   if (ctx.path !== '/.well-known/oauth-authorization-server') {
-//     return next();
-//   }
-
-//   ctx.path = '/.well-known/openid-configuration';
-//   return next().then(() => {
-//     ctx.path = '/.well-known/oauth-authorization-server';
-//   });
-// });
 
 app.use(routes(provider).routes());
 app.use(mount(provider.app));
