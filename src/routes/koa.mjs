@@ -79,7 +79,7 @@ export default (provider) => {
           details: prompt.details,
           params,
           title: 'Sign-in',
-          google: ctx.google,
+          microsoft: ctx.microsoft,
           session: session ? debug(session) : undefined,
           dbg: {
             params: debug(params),
@@ -110,7 +110,7 @@ export default (provider) => {
     text: false, json: false, patchNode: true, patchKoa: true,
   });
 
-  router.get('/interaction/callback/google', (ctx) => ctx.render('repost', { provider: 'google', layout: false }));
+  router.get('/interaction/callback/microsoft', (ctx) => ctx.render('repost', { provider: 'microsoft', layout: false }));
 
   router.post('/interaction/:uid/login', body, async (ctx) => {
     const { uid, prompt: { name } } = await provider.interactionDetails(ctx.req, ctx.res);
@@ -148,30 +148,32 @@ export default (provider) => {
     const path = `/interaction/${ctx.params.uid}/federated`;
 
     switch (ctx.request.body.provider) {
-      case 'google': {
-        const callbackParams = ctx.google.callbackParams(ctx.req);
+      case 'microsoft': {
+        const callbackParams = ctx.microsoft.callbackParams(ctx.req);
+        console.log(callbackParams);
 
         // init
         if (!Object.keys(callbackParams).length) {
           const state = `${ctx.params.uid}|${crypto.randomBytes(32).toString('hex')}`;
           const nonce = crypto.randomBytes(32).toString('hex');
 
-          ctx.cookies.set('google.state', state, { path, sameSite: 'strict' });
-          ctx.cookies.set('google.nonce', nonce, { path, sameSite: 'strict' });
+          ctx.cookies.set('microsoft.state', state, { path, sameSite: 'strict' });
+          ctx.cookies.set('microsoft.nonce', nonce, { path, sameSite: 'strict' });
 
-          return ctx.redirect(ctx.google.authorizationUrl({
+          return ctx.redirect(ctx.microsoft.authorizationUrl({
             state, nonce, scope: 'openid email profile',
           }));
         }
 
         // callback
-        const state = ctx.cookies.get('google.state');
-        ctx.cookies.set('google.state', null, { path });
-        const nonce = ctx.cookies.get('google.nonce');
-        ctx.cookies.set('google.nonce', null, { path });
+        const state = ctx.cookies.get('microsoft.state');
+        ctx.cookies.set('microsoft.state', null, { path });
+        const nonce = ctx.cookies.get('microsoft.nonce');
+        ctx.cookies.set('microsoft.nonce', null, { path });
 
-        const tokenset = await ctx.google.callback(undefined, callbackParams, { state, nonce, response_type: 'id_token' });
-        const account = await Account.findByFederated('google', tokenset.claims());
+        const tokenset = await ctx.microsoft.callback(undefined, callbackParams, { state, nonce, response_type: 'id_token' });
+        console.log(tokenset.claims());
+        const account = await Account.findByFederated('microsoft', tokenset.claims());
 
         const result = {
           select_account: {}, // make sure its skipped by the interaction policy since we just logged in

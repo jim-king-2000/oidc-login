@@ -56,28 +56,28 @@ if (process.env.MONGODB_URI) {
 const provider = new oidcProvider.Provider(ISSUER, { adapter, ...configuration });
 
 if (MICROSOFT_CLIENT_ID) {
-  const google = await openid.Issuer.discover('https://login.microsoftonline.com/bf7ed45e-700d-49f5-b7ed-0d588d4992f7/v2.0/.well-known/openid-configuration');
-  const googleClient = new google.Client({
+  const microsoft = await openid.Issuer.discover('https://login.microsoftonline.com/bf7ed45e-700d-49f5-b7ed-0d588d4992f7/v2.0/.well-known/openid-configuration');
+  const microsoftClient = new microsoft.Client({
     client_id: MICROSOFT_CLIENT_ID,
     response_types: ['id_token'],
-    redirect_uris: [`${ISSUER}/interaction/callback/google`],
+    redirect_uris: [`${ISSUER}/interaction/callback/microsoft`],
     grant_types: ['implicit'],
   });
-  app.context.google = googleClient;
+  app.context.microsoft = microsoftClient;
 }
 
-const { interactionFinished } = provider;
-provider.interactionFinished = (...args) => {
-  const { login } = args[2];
-  if (login) {
-    Object.assign(args[2].login, {
-      acr: 'urn:mace:incommon:iap:bronze',
-      amr: login.account.startsWith('google.') ? ['google'] : ['pwd'],
-    });
-  }
+// const { interactionFinished } = provider;
+// provider.interactionFinished = (...args) => {
+//   const { login } = args[2];
+//   if (login) {
+//     Object.assign(args[2].login, {
+//       acr: 'urn:mace:incommon:iap:bronze',
+//       amr: login.account.startsWith('google.') ? ['google'] : ['pwd'],
+//     });
+//   }
 
-  return interactionFinished.call(provider, ...args);
-};
+//   return interactionFinished.call(provider, ...args);
+// };
 
 const { invalidate: orig } = provider.Client.Schema.prototype;
 
