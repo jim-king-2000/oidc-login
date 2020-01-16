@@ -26,6 +26,14 @@ render(app, {
   root: path.join(path.dirname(fileURLToPath(import.meta.url)), 'views'),
 });
 
+let adapter;
+if (process.env.MONGODB_URI) {
+  adapter = require('./adapters/mongodb'); // eslint-disable-line global-require
+  await adapter.connect();
+}
+
+const provider = new oidcProvider.Provider(ISSUER, { adapter, ...configuration });
+
 if (process.env.NODE_ENV === 'production') {
   app.proxy = true;
   lodash.set(configuration, 'cookies.short.secure', true);
@@ -44,15 +52,16 @@ if (process.env.NODE_ENV === 'production') {
       ctx.status = 400;
     }
   });
-}
+} else {
+  const { invalidate: orig } = provider.Client.Schema.prototype;
+  provider.Client.Schema.prototype.invalidate = function invalidate(message, code) {
+    if (code === 'implicit-force-https' || code === 'implicit-forbid-localhost') {
+      return;
+    }
 
-let adapter;
-if (process.env.MONGODB_URI) {
-  adapter = require('./adapters/mongodb'); // eslint-disable-line global-require
-  await adapter.connect();
+    orig.call(this, message);
+  };
 }
-
-const provider = new oidcProvider.Provider(ISSUER, { adapter, ...configuration });
 
 if (MICROSOFT_CLIENT_ID) {
   const microsoft = await openid.Issuer.discover('https://login.microsoftonline.com/bf7ed45e-700d-49f5-b7ed-0d588d4992f7/v2.0/.well-known/openid-configuration');
@@ -65,14 +74,7 @@ if (MICROSOFT_CLIENT_ID) {
   app.context.microsoft = microsoftClient;
 }
 
-const { invalidate: orig } = provider.Client.Schema.prototype;
-provider.Client.Schema.prototype.invalidate = function invalidate(message, code) {
-  if (code === 'implicit-force-https' || code === 'implicit-forbid-localhost') {
-    return;
-  }
 
-  orig.call(this, message);
-};
 
 app.use(routes(provider).routes());
 app.use(mount(provider.app));
