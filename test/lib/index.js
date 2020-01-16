@@ -1,7 +1,7 @@
 
 export function getClientSettings() {
   return {
-    authority: 'http://login.locationbackbone.top/',
+    authority: 'https://login.locationbackbone.top/',
     // authority: 'http://47.96.126.79:7000/',
     // authority: 'http://localhost:7000/',
     client_id: 'oidcCLIENT',
