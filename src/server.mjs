@@ -16,6 +16,7 @@ const { MICROSOFT_CLIENT_ID, PORT = 7000, ISSUER = `http://localhost:${PORT}` } 
 configuration.findAccount = Account.findAccount;
 
 const app = new Koa();
+app.proxy = true;
 app.use(cors());
 app.use(helmet());
 render(app, {
