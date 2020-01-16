@@ -8,7 +8,7 @@
       NODE_ENV: 'production',
       NODE_PORT : 7000,
       MICROSOFT_CLIENT_ID: '81c51d3f-758e-4355-91fd-9781ae76193c',
-      ISSUER: 'http://http://47.96.126.79:7000'
+      ISSUER: 'https://login.locationbackbone.top'
     },
     'max-memory-restart': '300M'
   }]
