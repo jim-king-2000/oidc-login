@@ -49,8 +49,8 @@ export default {
     },
   },
   cookies: {
-    long: { signed: true, maxAge: (1 * 24 * 60 * 60) * 1000 }, // 1 day in ms
-    short: { signed: true },
+    long: { httpOnly: true, signed: true, maxAge: (1 * 24 * 60 * 60) * 1000, sameSite: 'lax' }, // 1 day in ms
+    short: { httpOnly: true, signed: true, sameSite: 'lax' },
     keys: ['some secret key', 'and also the old rotated away some time ago', 'and one more'],
   },
   claims: {
