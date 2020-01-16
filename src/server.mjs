@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import path from 'path';
 import { fileURLToPath } from 'url';
 import lodash from 'lodash';
@@ -66,21 +64,7 @@ if (MICROSOFT_CLIENT_ID) {
   app.context.microsoft = microsoftClient;
 }
 
-// const { interactionFinished } = provider;
-// provider.interactionFinished = (...args) => {
-//   const { login } = args[2];
-//   if (login) {
-//     Object.assign(args[2].login, {
-//       acr: 'urn:mace:incommon:iap:bronze',
-//       amr: login.account.startsWith('google.') ? ['google'] : ['pwd'],
-//     });
-//   }
-
-//   return interactionFinished.call(provider, ...args);
-// };
-
 const { invalidate: orig } = provider.Client.Schema.prototype;
-
 provider.Client.Schema.prototype.invalidate = function invalidate(message, code) {
   if (code === 'implicit-force-https' || code === 'implicit-forbid-localhost') {
     return;
@@ -88,8 +72,6 @@ provider.Client.Schema.prototype.invalidate = function invalidate(message, code)
 
   orig.call(this, message);
 };
-
-provider.use(helmet());
 
 app.use(routes(provider).routes());
 app.use(mount(provider.app));
