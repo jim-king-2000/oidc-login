@@ -28,13 +28,13 @@ export default {
         'http://localhost:3000/signinSilentCallback',
         'http://localhost:8092/signinRedirectCallback',
         'http://localhost:8092/signinSilentCallback',
-        'http://locationbackbone.top:10000/signinRedirectCallback',
-        'http://locationbackbone.top:10000/signinSilentCallback',
+        'https://bus.locationbackbone.top/signinRedirectCallback',
+        'https://bus.locationbackbone.top/signinSilentCallback',
       ],
       post_logout_redirect_uris: [
         'http://localhost:3000/signoutRedirectCallback',
         'http://localhost:8092/signoutRedirectCallback',
-        'http://locationbackbone.top:10000/signoutRedirectCallback',
+        'https://bus.locationbackbone.top/signoutRedirectCallback',
       ],
     }
   ],
