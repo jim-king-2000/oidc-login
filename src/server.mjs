@@ -11,6 +11,9 @@ import openid from 'openid-client';
 import Account from './support/account.mjs';
 import configuration from './support/configuration.mjs';
 import routes from './routes/koa.mjs';
+import adapter from './adapters/mongodb.mjs';
+
+await adapter.connect();
 
 const { MICROSOFT_CLIENT_ID, PORT = 7000, ISSUER = `http://localhost:${PORT}` } = process.env;
 configuration.findAccount = Account.findAccount;
@@ -46,11 +49,11 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-let adapter;
-if (process.env.MONGODB_URI) {
-  adapter = require('./adapters/mongodb'); // eslint-disable-line global-require
-  await adapter.connect();
-}
+// let adapter;
+// if (process.env.MONGODB_URI) {
+//   adapter = require('./adapters/mongodb'); // eslint-disable-line global-require
+//   await adapter.connect();
+// }
 
 const provider = new oidcProvider.Provider(ISSUER, { adapter, ...configuration });
 

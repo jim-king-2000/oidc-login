@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
 
 // npm i mongodb@^3.0.0
-const { MongoClient } = require('mongodb'); // eslint-disable-line import/no-unresolved
-const snakeCase = require('lodash/snakeCase');
+import mongodb from 'mongodb';
+import lodash from 'lodash';
 
 let DB;
 
@@ -46,7 +46,7 @@ const collections = new CollectionSet();
 
 class MongoAdapter {
   constructor(name) {
-    this.name = snakeCase(name);
+    this.name = lodash.snakeCase(name);
 
     // NOTE: you should never be creating indexes at runtime in production, the following is in
     //   place just for demonstration purposes of the indexes required
@@ -125,11 +125,11 @@ class MongoAdapter {
   // This is not part of the required or supported API, all initialization should happen before
   // you pass the adapter to `new Provider`
   static async connect() {
-    const connection = await MongoClient.connect(process.env.MONGODB_URI, {
+    const connection = await mongodb.MongoClient.connect('mongodb://test:111@47.97.195.81:8282/test', {
       useNewUrlParser: true,
     });
     DB = connection.db(connection.s.options.dbName);
   }
 }
 
-module.exports = MongoAdapter;
+export default MongoAdapter;

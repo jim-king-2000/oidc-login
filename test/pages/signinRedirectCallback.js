@@ -6,6 +6,7 @@ import { getClientSettings } from '../lib';
 export default class extends Component {
   async componentDidMount() {
     try {
+      console.log(location.href)
       const manager = new UserManager(getClientSettings());
       await manager.signinRedirectCallback();
     } finally {
